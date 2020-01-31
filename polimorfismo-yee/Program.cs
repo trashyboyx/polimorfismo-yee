@@ -1,6 +1,6 @@
 ﻿using polimorfismo_yee.Entities;
-using System;
 using System.Collections.Generic;
+using System;
 using System.Globalization;
 
 namespace polimorfismo_yee
@@ -9,39 +9,41 @@ namespace polimorfismo_yee
     {
         static void Main(string[] args)
         {
-            List<Employee> listOfEmployees = new List<Employee>(); 
+            List<Product> products = new List<Product>();
 
-            Console.Write("Enter the number of employees: ");
-            int numberOfEmployees = int.Parse(Console.ReadLine());
+            Console.Write("Enter the number of products: ");
+            int numberOfProducts = int.Parse(Console.ReadLine());
 
-            for (int i = 1; i <= numberOfEmployees; i++)
+            for (int i = 1; i <= numberOfProducts; i++)
             {
-                Console.WriteLine($"Employee #{i} data:");
-                Console.Write("Outsourced (y/n)? ");
-                char outsourced = char.Parse(Console.ReadLine());
+                Console.WriteLine($"Product #{i} data:");
+                Console.Write("Common, used or imported (c/u/i)? ");
+                char productType = char.Parse(Console.ReadLine());
                 Console.Write("Name: ");
                 string name = Console.ReadLine();
-                Console.Write("Hours: ");
-                int hours = int.Parse(Console.ReadLine());
-                Console.Write("Value per hour: ");
-                double valuePerHour = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                Console.Write("Price: ");
+                double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
-                if (outsourced == 'y')
+                if (productType == 'u')
                 {
-                    Console.Write("Additional charge: ");
-                    double additional = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                    listOfEmployees.Add(new OutsourcedEmployee(name, hours, valuePerHour, additional));
+                    Console.Write("Manufacture date (DD/MM/YYYY): ");
+                    DateTime date = DateTime.Parse(Console.ReadLine());
+                    products.Add(new UsedProduct(name, price, date));
+                }
+                else if (productType == 'i')
+                {
+                    Console.Write("Customs fee: ");
+                    double fee = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    products.Add(new ImportedProduct(name, price, fee));
                 }
                 else
-                {
-                    listOfEmployees.Add(new Employee(name, hours, valuePerHour));
-                }
+                    products.Add(new Product(name, price));
             }
             Console.WriteLine();
-            Console.WriteLine("PAYMENTS:");
-            listOfEmployees.ForEach(employee =>
+            Console.WriteLine("PRICE TAGS:");
+            products.ForEach(product =>
             {
-                Console.WriteLine(employee.Name + " - $" + employee.Payment().ToString("F2", CultureInfo.InvariantCulture));
+                Console.WriteLine(product.PriceTag());
             });
         }
     }
